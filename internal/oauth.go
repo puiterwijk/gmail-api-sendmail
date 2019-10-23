@@ -91,7 +91,12 @@ func saveToken(file string, token *oauth2.Token) {
 }
 
 func getGmailClient() *gmail.Service {
-	b, err := ioutil.ReadFile("client_secret.json")
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatalf("Unable to get user homedir: %v", err)
+	}
+	cspath := filepath.Join(usr.HomeDir, ".gmail_client_secret.json")
+	b, err := ioutil.ReadFile(cspath)
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
